@@ -1,0 +1,56 @@
+{#"INHERIT BASE TEMPLATE HERE"#}
+
+{% block content %}
+    <div class="hello-form">
+        {{ render_form(form, action=request.full_path) }}
+    </div>
+    <h5>{{ messages|length }} messages
+        <small class="float-right">
+            <a href="#bottom" title="Go Bottom">&darr;</a>
+        </small>
+    </h5>
+    <div class="list-group">
+        {% for message in messages %}
+            <a class="list-group-item list-group-item-action flex-column">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1 text-success">{{ message.author_name }}
+                        <small class="text-muted"> #{{ loop.revindex }}</small>
+                    </h5>
+                    <small data-toggle="tooltip" data-placement="top"
+                           data-timestamp="{{ message.timestamp.strftime('%Y-%m-%dT%H:%M:%SZ') }}"
+                           data-delay="500">
+                        {{ moment(message.timestamp).fromNow(refresh=True) }}
+                    </small>
+                </div>
+                <p class="mb-1">{{ message.content }}</p>
+                <div>
+                    <table>
+                        <tr>
+
+                            <td>
+                                <small>
+                                    Likes: {{ message.likes }}
+                                </small>
+                            </td>
+                            <td>
+                                <form method="post"
+                                      action="{{ url_for('.like_message', message_id=message.id, next=request.full_path) }}">
+                                    <button type="submit" class="btn btn-danger btn-sm">Like
+                                    </button>
+                                </form>
+                            </td>
+                            <td>
+                                <form class="inline" method="post"
+                                      action="{{ url_for('.delete_message', message_id=message.id, next=request.full_path) }}">
+                                    <button type="submit" class="btn btn-danger btn-sm"
+                                            onclick="return confirm('Are you sure?');">Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+{% endblock %}
