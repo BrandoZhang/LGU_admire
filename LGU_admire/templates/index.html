@@ -1,4 +1,5 @@
-{#"INHERIT BASE TEMPLATE HERE"#}
+{% extends 'base.html' %}
+{% from 'bootstrap/form.html' import render_form %}
 
 {% block content %}
     <div class="hello-form">
@@ -26,7 +27,6 @@
                 <div>
                     <table>
                         <tr>
-
                             <td>
                                 <small>
                                     Likes: {{ message.likes }}

@@ -3,10 +3,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-{#    <title>{% block title %}FILL NAME HERE{% endblock %}</title>#}
-{#    <link rel="icon" href="LINK ICON HERE">#}
-{#    <link rel="stylesheet" href="LINK BOOTSTRAP HERE" type="text/css">#}
-{#    <link rel="stylesheet" href="LINK CSS HERE" type="text/css">#}
+    <title>{% block title %}LGU 告白墙!{% endblock %}</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon_h.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" type="text/css">
 </head>
 <body>
 <main class="container">
@@ -16,7 +16,13 @@
             <small class="text-muted sub-title">powered by Flask</small>
         </h1>
     </header>
-{#"FINISH MESSAGE AND CONTENT BLOCK HERE"#}
+    {% for message in get_flashed_messages() %}
+        <div class="alert alert-info">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{ message }}
+        </div>
+    {% endfor %}
+    {% block content %}{% endblock %}
     <footer class="text-center">
         {% block footer %}
             <small> &copy; 2018 EDIT FROM <a href="http://greyli.com" title="Written by Grey Li">Grey Li</a> /
@@ -32,6 +38,6 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/script.js') }}"></script>
-{#{{ moment.include_moment("LINK MOMENT.js HERE") }}#}
+{{ moment.include_moment(local_js=url_for('static', filename='js/moment-with-locales.min.js')) }}
 </body>
 </html>

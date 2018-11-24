@@ -8,8 +8,12 @@ from LGU_admire.models import Message
 @click.option("--drop", is_flag=True, help="Create after drop.")
 def initdb(drop):
     """Initialize the database."""
-    pass
-
+    if drop:
+        click.confirm("This operation will delete the database, do you want to continue?", abort=True)
+        db.drop_all()
+        click.echo("Drop tables.")
+    db.create_all()
+    click.echo("Initialized database.")
 
 
 @app.cli.command()
@@ -17,4 +21,22 @@ def initdb(drop):
 def forge(count):
     """Generate fake messages."""
     from faker import Faker
-    pass
+
+    db.drop_all()
+    db.create_all()
+
+    fake = Faker("zh_CN")  # Generate fake data with specified language
+    click.echo("Generating...")
+
+    for i in range(count):
+        message = Message(
+            author_name=fake.name(),
+            content=fake.sentence(),
+            timestamp=fake.date_time_this_year(),
+            ip_addr=fake.ipv4_private(),
+            likes=fake.random_int(min=0, max=999)
+        )
+        db.session.add(message)
+
+    db.session.commit()
+    click.echo(f"Created {count} fake messages.")
